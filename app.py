@@ -52,3 +52,15 @@ def train_model(X, y):
     return model, scaler, selector, accuracy
 
 # ... [rest of the code remains the same]
+def main():
+    # ... [previous code]
+
+    if SMOTE_AVAILABLE:
+        st.info("SMOTE is being used to handle class imbalance.")
+    else:
+        st.warning("SMOTE is not available. Class imbalance is not being addressed, which may affect model performance.")
+
+    # ... [rest of the main function]
+
+if __name__ == "__main__":
+    main()
