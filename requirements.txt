@@ -1,7 +1,13 @@
 pandas==1.5.3
 numpy==1.24.3
-scikit-learn==1.2.2
+scikit-learn==1.0.2
 streamlit==1.22.0
 joblib==1.2.0
 imbalanced-learn==0.10.1
 setuptools==65.5.0
+backports.abc==0.5
+psutil==5.9.0
+lz4==4.3.2
+Cython==0.29.33
+scikit-sparse==0.4.8
+uarray==0.8.2
