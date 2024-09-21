@@ -1,3 +1,6 @@
+#!  C:\Users\ODUTOPX\OneDrive - AbbVie Inc (O365)\Desktop\Project Heart Attack\myenv\Scripts\python.exe
+
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
