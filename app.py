@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.feature_selection import SelectKBest, f_classif
 import time
+import lightgbm as lgb
 
 # Global variable to check if SMOTE is available
 try:
@@ -73,25 +74,8 @@ def preprocess_data(data):
     
     return X_encoded, y_encoded, feature_encoder, target_encoder, features
 
-def simple_oversample(X, y):
-    class_counts = np.bincount(y)
-    max_count = np.max(class_counts)
-    X_resampled = []
-    y_resampled = []
-    for class_label in range(len(class_counts)):
-        class_indices = np.where(y == class_label)[0]
-        X_class = X[class_indices]
-        y_class = y[class_indices]
-        n_samples = len(class_indices)
-        n_repeats = max_count // n_samples
-        remainder = max_count % n_samples
-        X_resampled.append(np.repeat(X_class, n_repeats, axis=0))
-        X_resampled.append(X_class[:remainder])
-        y_resampled.append(np.repeat(y_class, n_repeats))
-        y_resampled.append(y_class[:remainder])
-    return np.vstack(X_resampled), np.concatenate(y_resampled)
 
-def train_model(X, y):
+def train_model_lgb(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     if SMOTE_AVAILABLE:
@@ -100,21 +84,16 @@ def train_model(X, y):
     else:
         X_train_resampled, y_train_resampled = simple_oversample(X_train, y_train)
     
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train_resampled)
-    X_test_scaled = scaler.transform(X_test)
-    
-    model = RandomForestClassifier(n_estimators=50, random_state=42)
+    model = lgb.LGBMClassifier(random_state=42)
     
     start_time = time.time()
-    model.fit(X_train_scaled, y_train_resampled)
+    model.fit(X_train_resampled, y_train_resampled)
     training_time = time.time() - start_time
     
-    y_pred = model.predict(X_test_scaled)
+    y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
     
-    return model, scaler, None, accuracy, training_time
-
+    return model, None, None, accuracy, training_time
 def main():
     st.title("Cancer Drug Prediction App")
     
