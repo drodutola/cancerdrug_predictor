@@ -11,3 +11,4 @@ lz4==4.3.2
 Cython==0.29.33
 scikit-sparse==0.4.8
 uarray==0.8.2
+lightgbm==3.3.5
